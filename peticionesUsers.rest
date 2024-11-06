@@ -1,0 +1,13 @@
+@url = http://localhost:3000/api 
+
+GET {{url}}/users
+
+###
+POST {{url}}/users
+
+###
+PUT {{url}}/users
+
+
+###
+DELETE {{url}}/users
