@@ -1,72 +1,74 @@
-const { selectAll } = require("../models/usersModel");
+const { selectAll, insertUser, selectById, updateUserById, deleteById } = require('../models/usersModel');
 
-const getAllUsers = async (req, res, ) => {
-    const result = await selectAll()
-    console.log(result);
-
-    res.json({
-        message: 'Recupera todos los users'
-    });
-
-
-    /* try {
-        const [result] = await selectAll()
+const getAllUsers = async (req, res, next) => {
+    try {
+        const [result] = await selectAll();
         res.json(result);
     } catch (error) {
         next(error);
-    } */
-}
+    }
+};
 
-
-const createUser = async (req, res, ) => {
-    res.json({
-        message: 'Crea todos los users'
-    });
-
-   /* try {
-        // Insertar el nuevo cliente
-        const [result] = await insertCliente(req.body);
-        // Recuperar los datos del nuevo cliente
-        const cliente = await selectById(result.insertId);
-
-        res.json(cliente);
-    } catch (error) {
-        next(error);
-    }*/
-}
-
-const updateUser = async (req, res, ) => {
-    res.json({
-        message: 'Actualiza todos los users'
-    });
-    
-   /* const { clienteId } = req.params;
-   try {
-        const [result] = await updateClienteById(clienteId, req.body);
-        const cliente = await selectById(clienteId);
-        res.json(cliente);
-    } catch (error) {
-        next(error);
-    }*/
-}
-
-const deleteUser = async (req, res, ) => {
-    res.json({
-        message: 'Borra todos los users'
-    })
-
-
-  /*  const { clienteId } = req.params;
-
+const getById = async (req, res, next) => {
+    const { userId } = req.params;
     try {
-        const cliente = await selectById(clienteId);
-        await deleteById(clienteId);
-        res.json(cliente);
+        const [cliente] = await selectById(userId);
+
+        if (cliente.length === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        res.json(cliente[0]);
     } catch (error) {
         next(error);
-    } */
-}
+    }
+};
+
+const createUser = async (req, res, next) => {
+    try {
+        const [result] = await insertUser(req.body);
+        const insertId = result.insertId;
+
+        const [cliente] = await selectById(insertId);
+        res.status(201).json(cliente[0]);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const updateUser = async (req, res, next) => {
+    const { userId } = req.params;
+    try {
+        const [existingUser] = await selectById(userId);
+
+        if (existingUser.length === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        await updateUserById(userId, req.body);
+        const [updatedUser] = await selectById(userId);
+        res.json(updatedUser[0]);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const deleteUser = async (req, res, next) => {
+    const { userId } = req.params;
+    try {
+        const [cliente] = await selectById(userId);
+
+        if (cliente.length === 0) {
+            return res.status(404).json({ message: "Usuario no encontrado" });
+        }
+
+        await deleteById(userId);
+        res.json({ message: "Usuario eliminado correctamente", usuario: cliente[0] });
+    } catch (error) {
+        next(error);
+    }
+};
 
 module.exports = {
-    getAllUsers, createUser, updateUser, deleteUser
-}
+    getAllUsers, createUser, getById, updateUser, deleteUser
+};
