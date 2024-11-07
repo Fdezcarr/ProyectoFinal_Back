@@ -1,13 +1,33 @@
 @url = http://localhost:3000/api 
 
-GET {{url}}/users
+GET {{url}}/users/
 
 ###
 POST {{url}}/users
+Content-Type: application/json
+
+{
+    "nombre": "Jose",
+    "apellido": "Lopez",
+    "email": "jose@gmail.com",
+    "password": "1234",
+    "rol": "jefe"
+}
 
 ###
-PUT {{url}}/users
+PUT {{url}}/users/4
+Content-Type: application/json
+
+{
+    "nombre": "Antonio",
+    "apellido": "Lopez",
+    "email": "jose@gmail.com",
+    "password": "1234",
+    "rol": "jefe"
+}
+
 
 
 ###
-DELETE {{url}}/users
+DELETE {{url}}/users/4
+Content-Type: application/json
