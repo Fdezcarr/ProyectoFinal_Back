@@ -1,0 +1,33 @@
+@url = http://localhost:3000/api 
+
+GET {{url}}/pedidos
+
+
+###
+POST {{url}}/pedidos
+Content-Type: application/json
+
+{
+  "fecha_salida": "2024-11-08",
+  "origen": "Almacén Central",
+  "destino": "Sucursal Este",
+  "matricula_camion": "XYZ-789",
+  "estado": "pendiente"
+}
+
+###
+PUT {{url}}/pedidos/1
+Content-Type: application/json
+
+{
+  "fecha_salida": "2024-11-09",
+  "origen": "Almacén Central",
+  "destino": "Sucursal Oeste",
+  "matricula_camion": "ABC-123",
+  "estado": "revisando"
+}
+
+
+###
+
+DELETE {{url}}/pedidos/1
