@@ -30,4 +30,4 @@ Content-Type: application/json
 
 ###
 
-DELETE {{url}}/pedidos/1
+DELETE {{url}}/pedidos/1develo
