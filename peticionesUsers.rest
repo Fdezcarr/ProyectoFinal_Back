@@ -15,7 +15,20 @@ Content-Type: application/json
 }
 
 ###
-PUT {{url}}/users/8
+POST {{url}}/users
+Content-Type: application/json
+
+{
+    "nombre": "Manuel",
+    "apellido": "Gomez",
+    "email": "manuel@gmail.com",
+    "password": "1234",
+    "rol": "encargado"
+}
+
+
+###
+PUT {{url}}/users/11
 Content-Type: application/json
 
 {
@@ -23,11 +36,11 @@ Content-Type: application/json
     "apellido": "Lopez",
     "email": "antonio@gmail.com",
     "password": "1234",
-    "rol": "jefe"
+    "rol": "operario"
 }
 
 
 
 ###
-DELETE {{url}}/users/9
+DELETE {{url}}/users/11
 Content-Type: application/json
