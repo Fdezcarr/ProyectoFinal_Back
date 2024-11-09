@@ -14,9 +14,20 @@ Content-Type: application/json
   "matricula_camion": "XYZ-789",
   "estado": "pendiente"
 }
+###
+POST {{url}}/pedidos
+Content-Type: application/json
+
+{
+  "fecha_salida": "2024-11-08",
+  "origen": "Almacén Central",
+  "destino": "Sucursal Este",
+  "matricula_camion": "XYZ-789",
+  "estado": "completo"
+}
 
 ###
-PUT {{url}}/pedidos/1
+PUT {{url}}/pedidos/7
 Content-Type: application/json
 
 {
@@ -30,4 +41,4 @@ Content-Type: application/json
 
 ###
 
-DELETE {{url}}/pedidos/1
+DELETE {{url}}/pedidos/7
