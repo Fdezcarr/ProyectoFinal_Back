@@ -27,7 +27,7 @@ Content-Type: application/json
 }
 
 ###
-PUT {{url}}/pedidos/7
+PUT {{url}}/pedidos/1
 Content-Type: application/json
 
 {
