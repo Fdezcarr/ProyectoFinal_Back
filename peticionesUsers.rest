@@ -28,7 +28,7 @@ Content-Type: application/json
 
 
 ###
-PUT {{url}}/users/11
+PUT {{url}}/users/2
 Content-Type: application/json
 
 {
