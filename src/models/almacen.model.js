@@ -8,10 +8,10 @@ function selectAllAlmacenes() {
 
 // Insertar un nuevo almacén
 function insertAlmacen(data) {
-    const { nombre, ubicacion } = data;
+    const { nombre, localizacion } = data;
     return pool.query(
-        'INSERT INTO almacenes (nombre, ubicacion) VALUES (?, ?)',
-        [nombre, ubicacion]
+        'INSERT INTO almacenes (nombre, localizacion) VALUES (?, ?)',
+        [nombre, localizacion]
     );
 }
 
@@ -22,10 +22,10 @@ function selectAlmacenById(id) {
 
 // Actualizar un almacén por su ID
 function updateAlmacenById(id, data) {
-    const { nombre, ubicacion } = data;
+    const { nombre, localizacion } = data;
     return pool.query(
-        'UPDATE almacenes SET nombre = ?, ubicacion = ? WHERE id = ?',
-        [nombre, ubicacion, id]
+        'UPDATE almacenes SET nombre = ?, localizacion = ? WHERE id = ?',
+        [nombre, localizacion, id]
     );
 }
 
