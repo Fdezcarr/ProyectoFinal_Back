@@ -22,10 +22,10 @@ function selectPedidoById(id) {
 
 // Actualizar un pedido por su ID
 function updatePedidoById(id, data) {
-    const { fecha_salida, origen, destino, matricula_camion, estado } = data;
+    const { origen, destino, matricula_camion, estado } = data;
     return pool.query(
-        'UPDATE pedidos SET fecha_salida = ?, origen = ?, destino = ?, matricula_camion = ?, estado = ? WHERE id = ?',
-        [fecha_salida, origen, destino, matricula_camion, estado, id]
+        'UPDATE pedidos SET origen = ?, destino = ?, matricula_camion = ?, estado = ? WHERE id = ?',
+        [origen, destino, matricula_camion, estado, id]
     );
 }
 

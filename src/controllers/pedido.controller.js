@@ -4,6 +4,8 @@ const { selectAllPedidos, insertPedido, selectPedidoById, updatePedidoById, dele
 const getAllPedidos = async (req, res, next) => {
     try {
         const [result] = await selectAllPedidos();
+		console.log(result);
+		
         res.json(result);
     } catch (error) {
         next(error);
@@ -39,6 +41,7 @@ const createPedido = async (req, res, next) => {
 
 const updatePedido = async (req, res, next) => {
     const { pedidoId } = req.params;
+    const { origen, destino, matricula_camion, estado } = req.body;
     try {
         const [existingPedido] = await selectPedidoById(pedidoId);
 
@@ -46,7 +49,14 @@ const updatePedido = async (req, res, next) => {
             return res.status(404).json({ message: "Pedido no encontrado" });
         }
 
-        await updatePedidoById(pedidoId, req.body);
+        const updatedFields = {
+            origen,
+            destino,
+            matricula_camion,
+            estado
+        };
+
+        await updatePedidoById(pedidoId, updatedFields);
         const [updatedPedido] = await selectPedidoById(pedidoId);
         res.json(updatedPedido[0]);
     } catch (error) {

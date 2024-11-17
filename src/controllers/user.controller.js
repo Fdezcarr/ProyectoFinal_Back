@@ -1,4 +1,5 @@
-const { selectAll, insertUser, selectById, updateUserById, deleteById } = require('../models/user.model');
+const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword } = require('../models/user.model');
+const bcrypt = require('bcryptjs'); 
 
 const getAllUsers = async (req, res, next) => {
     try {
@@ -19,6 +20,38 @@ const getById = async (req, res, next) => {
         }
 
         res.json(cliente[0]);
+    } catch (error) {
+        next(error);
+    }
+};
+
+const authenticateUser = async (req, res, next) => {
+    const { email, password } = req.body;
+	console.log(req.body);
+	
+
+    if (!email || !password) {
+        return res.status(400).json({ message: "Correo y contraseña son requeridos" });
+    }
+
+    try {
+        // Usamos selectByEmailAndPassword solo con el email
+        const [user] = await selectByEmailAndPassword(email);
+		console.log(user);
+		
+
+        if (user.length === 0) {
+            return res.status(401).json({ message: "Correo o contraseña incorrectos" });
+        }
+
+        // Compara la contraseña proporcionada con la almacenada (encriptada)
+        const isPasswordValid = bcrypt.compareSync(password, user[0].password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: "Correo o contraseña incorrectos" });
+        }
+
+        res.json({ message: "Autenticación exitosa", user: user[0] });
     } catch (error) {
         next(error);
     }
@@ -70,5 +103,5 @@ const deleteUser = async (req, res, next) => {
 };
 
 module.exports = {
-    getAllUsers, createUser, getById, updateUser, deleteUser
+    getAllUsers, createUser, getById, updateUser, deleteUser, authenticateUser
 };
