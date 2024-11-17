@@ -27,8 +27,6 @@ const getById = async (req, res, next) => {
 
 const authenticateUser = async (req, res, next) => {
     const { email, password } = req.body;
-	console.log(req.body);
-	
 
     if (!email || !password) {
         return res.status(400).json({ message: "Correo y contraseña son requeridos" });
@@ -37,8 +35,6 @@ const authenticateUser = async (req, res, next) => {
     try {
         // Usamos selectByEmailAndPassword solo con el email
         const [user] = await selectByEmailAndPassword(email);
-		console.log(user);
-		
 
         if (user.length === 0) {
             return res.status(401).json({ message: "Correo o contraseña incorrectos" });

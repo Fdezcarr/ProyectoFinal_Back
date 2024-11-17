@@ -3,9 +3,7 @@ const { selectAllPedidos, insertPedido, selectPedidoById, updatePedidoById, dele
 
 const getAllPedidos = async (req, res, next) => {
     try {
-        const [result] = await selectAllPedidos();
-		console.log(result);
-		
+        const [result] = await selectAllPedidos();		
         res.json(result);
     } catch (error) {
         next(error);
