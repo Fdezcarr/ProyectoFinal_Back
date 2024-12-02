@@ -16,7 +16,7 @@ router.post('/', checkToken, checkOperario, pedidoController.createPedido);
 // // Ruta para actualizar un pedido por su ID (solo operarios)
 router.put('/:pedidoId', checkToken, checkOperario, pedidoController.updatePedido);
 
-// Ruta para eliminar un pedido (solo jefes)
-router.delete('/:pedidoId', checkToken, checkJefe, pedidoController.deletePedido);
+// Ruta para eliminar un pedido (solo encargado)
+router.delete('/:pedidoId', checkToken, checkEncargado, pedidoController.deletePedido);
 
 module.exports = router;
