@@ -63,6 +63,37 @@ const checkRol = (rol) => {
     }
 }
 
+const checkOperario = (req, res, next) => {
+    if (req.user.rol !== 'operario') {
+        return res.status(403).json({ message: 'Debes ser operario para acceder a este recurso' });
+    }
+    next();
+};
+
+const checkEncargado = (req, res, next) => {
+    if (req.user.rol !== 'encargado') {
+        return res.status(403).json({ message: 'Debes ser encargado para acceder a este recurso' });
+    }
+    next();
+};
+
+const checkJefe = (req, res, next) => {
+    if (req.user.rol !== 'jefe') {
+        return res.status(403).json({ message: 'Debes ser jefe para acceder a este recurso' });
+    }
+    next();
+};
+
+const checkOperarioOrJefe = (req, res, next) => {
+    if (req.user.rol !== 'operario' && req.user.rol !== 'jefe') {
+        return res.status(403).json({ message: 'Debes ser operario o jefe para acceder a este recurso' });
+    }
+    next();
+};
+
+
+
+
 module.exports = {
-    checkClienteId, checkToken, checkAdmin, checkRol
+    checkClienteId, checkToken, checkAdmin, checkRol, checkOperario, checkEncargado, checkJefe, checkOperarioOrJefe
 }
