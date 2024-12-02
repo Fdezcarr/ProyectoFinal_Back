@@ -1,8 +1,7 @@
 // src/utils/middleware.js
 const jwt = require('jsonwebtoken');
 
-const { selectById: selectClienteById } = require("../models/clientesModel");
-const { selectById: selectStaffById } = require('../models/staffModel');
+const { selectById: selectClienteById } = require("../models/user.model");
 
 // Middleware para verificar si un cliente existe por su ID
 const checkClienteId = async (req, res, next) => {

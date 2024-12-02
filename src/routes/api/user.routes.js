@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-const { getAllUsers, createUser, updateUser, deleteUser, authenticateUser } = require('../../controllers/user.controller');
-
-const router = require('express').Router();
-
-router.get('/', getAllUsers);
-router.post('/', createUser);
-router.put('/:userId', updateUser);
-router.delete('/:userId', deleteUser);
-router.post('/authenticate', authenticateUser);
-=======
 const { getAllUsers, createUser, updateUser, deleteUser } = require('../../controllers/user.controller');
 const { checkToken, checkAdmin, checkRol } = require('../../utils/middleware');
 
@@ -16,7 +5,6 @@ const router = require('express').Router();
 
 // Ruta para obtener todos los usuarios (solo para administradores)
 router.get('/', checkToken, checkAdmin, getAllUsers);
->>>>>>> origin/develop
 
 // Ruta para crear un nuevo usuario (solo para administradores)
 router.post('/', checkToken, checkAdmin, createUser);
