@@ -5,6 +5,10 @@ function selectAll() {
     return pool.query('SELECT * FROM usuarios;');
 }
 
+function selectByEmailAndPassword(email) {
+    return pool.query('SELECT * FROM usuarios WHERE email = ?', [email]);
+}
+
 function insertUser(data) {
     const { nombre, apellido, email, password, rol } = data;
     const hashedPassword = bcrypt.hashSync(password, 8);
@@ -45,5 +49,6 @@ module.exports = {
     insertUser,
     selectById,
     updateUserById,
-    deleteById
+    deleteById, 
+    selectByEmailAndPassword
 };
