@@ -1,59 +1,68 @@
-// src/utils/middleware.js
 const jwt = require('jsonwebtoken');
+
+const { selectById: selectClienteById } = require("../models/user.model");
 const { selectById: selectStaffById } = require('../models/staffModel');
 
-// Middleware para verificar la validez de un token JWT
-const checkToken = async (req, res, next) => {
-    const authHeader = req.headers['authorization'];
+const checkClienteId = async (req, res, next) => {
+    const { clienteId } = req.params;
 
-    if (!authHeader) {
+    // Si el clienteId es un número
+    if (isNaN(clienteId)) {
+        return res.status(400).json({ message: 'El id del cliente es incorrecto' });
+    }
+
+    // Si el id del cliente existe en la BD
+    const cliente = await selectClienteById(clienteId);
+    if (!cliente) {
+        return res.status(404).json({ message: 'El id del cliente no existe en la BD' });
+    }
+
+    next();
+}
+
+const checkToken = async (req, res, next) => {
+    // ¿Viene la cabecera Authorization incluida?
+    if (!req.headers['authorization']) {
         return res.status(403).json({ message: 'Debes incluir la cabecera de Authorization' });
     }
 
-    const token = authHeader.split(' ')[1];  // "Bearer <token>"
+    const token = req.headers['authorization'];
 
+    // ¿El token es correcto?
     let data;
     try {
         data = jwt.verify(token, 'clave super secreta');
     } catch (error) {
-        return res.status(403).json({ message: 'El token es incorrecto o ha expirado' });
+        return res.status(403).json({ message: 'El token es incorrecto' });
     }
 
-    try {
-        const [usuario] = await selectStaffById(data.usuario_id);
-        if (!usuario) {
-            return res.status(403).json({ message: 'El usuario no existe en la base de datos' });
-        }
-
-        req.user = usuario;  // Adjuntar el usuario al objeto `req`
-    } catch (error) {
-        return res.status(500).json({ message: 'Error interno al verificar el token' });
+    // ¿El usuario codificado en el token existe?
+    const usuario = await selectStaffById(data.usuario_id);
+    if (!usuario) {
+        return res.status(403).json({ message: 'El usuario no existe' });
     }
+
+    req.user = usuario;
 
     next();
-};
+}
 
-// Middleware para comprobar si el usuario es administrador
 const checkAdmin = (req, res, next) => {
     if (req.user.rol !== 'admin') {
-        return res.status(403).json({ message: 'Debes ser administrador para acceder a este recurso' });
+        return res.status(403).json({ message: 'Debes ser administrador' });
     }
     next();
-};
+}
 
-// Middleware para verificar si el usuario tiene un rol específico
 const checkRol = (rol) => {
     return (req, res, next) => {
         if (req.user.rol !== rol) {
-            return res.status(403).json({ message: `Acceso denegado. Requiere el rol: ${rol}` });
+            return res.status(403).json({ message: `Solo puedes pasar si tienes el rol: ${rol}` });
         }
-        next();
-    };
-};
+        next()
+    }
+}
 
-// Exportar las funciones
 module.exports = {
-    checkToken,
-    checkAdmin,
-    checkRol
-};
+    checkClienteId, checkToken, checkAdmin, checkRol
+}

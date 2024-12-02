@@ -1,6 +1,7 @@
 // src/controllers/user.controller.js
 const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword } = require('../models/user.model');
 const bcrypt = require('bcryptjs'); 
+const { createToken } = require('../utils/helpers');
 
 const getAllUsers = async (req, res, next) => {
     try {
@@ -36,33 +37,31 @@ const authenticateUser = async (req, res, next) => {
     }
 
     try {
-        console.log('Intentando autenticar con email:', email);  // Log de depuración
+        // Buscar al usuario por email
         const [user] = await selectByEmailAndPassword(email);
 
         // Verificar si el usuario existe
         if (!user || user.length === 0) {
-            console.log('Usuario no encontrado');
             return res.status(401).json({ message: "Correo o contraseña incorrectos" });
-        }
-
-        // Asegurarse de que el campo de la contraseña esté presente
-        const storedPassword = user[0].password;
-        if (!storedPassword) {
-            console.log('La contraseña no está disponible');
-            return res.status(401).json({ message: "La contraseña no está disponible en la base de datos" });
         }
 
         // Compara la contraseña proporcionada con la almacenada (encriptada)
-        const isPasswordValid = bcrypt.compareSync(password, storedPassword);
+        const isPasswordValid = bcrypt.compareSync(password, user[0].password);
 
         if (!isPasswordValid) {
-            console.log('Contraseña incorrecta');
             return res.status(401).json({ message: "Correo o contraseña incorrectos" });
         }
 
-        res.json({ message: "Autenticación exitosa", user: user[0] });
+        // Generar el token JWT después de una autenticación exitosa
+        const token = createToken(user[0]);  // Llamada a la función `createToken` que creará el token JWT
+
+        // Devolver el token en la respuesta
+        res.json({
+            message: "Autenticación exitosa",
+            token: token,  // Incluye el token en la respuesta
+            user: user[0]  // También puedes devolver los datos del usuario si lo deseas
+        });
     } catch (error) {
-        console.error('Error al autenticar usuario:', error);  // Log de error
         next(error);
     }
 };
