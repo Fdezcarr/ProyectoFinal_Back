@@ -22,16 +22,20 @@ const checkClienteId = async (req, res, next) => {
 
 const checkToken = async (req, res, next) => {
     // ¿Viene la cabecera Authorization incluida?
-    if (!req.headers['authorization']) {
+    const auth = req.headers['authorization']
+    if (!auth) {
         return res.status(403).json({ message: 'Debes incluir la cabecera de Authorization' });
     }
 
-    const token = req.headers['authorization'];
+
+    const token = auth.replace('Bearer ', '');
+
 
     // ¿El token es correcto?
     let data;
     try {
         data = jwt.verify(token, 'clave super secreta');
+        req.user = data
     } catch (error) {
         return res.status(403).json({ message: 'El token es incorrecto' });
     }
@@ -42,13 +46,14 @@ const checkToken = async (req, res, next) => {
         return res.status(403).json({ message: 'El usuario no existe' });
     }
 
-    req.user = usuario;
+    // req.user = usuario;
+    // console.log('Decoded token:', req.user);
 
     next();
 }
 
 const checkAdmin = (req, res, next) => {
-    if (req.user.rol !== 'admin') {
+    if (req.user.usuario_rol !== 'admin') {
         return res.status(403).json({ message: 'Debes ser administrador' });
     }
     next();
@@ -56,7 +61,7 @@ const checkAdmin = (req, res, next) => {
 
 const checkRol = (rol) => {
     return (req, res, next) => {
-        if (req.user.rol !== rol) {
+        if (req.user.usuario_rol !== rol) {
             return res.status(403).json({ message: `Solo puedes pasar si tienes el rol: ${rol}` });
         }
         next()
@@ -64,21 +69,22 @@ const checkRol = (rol) => {
 }
 
 const checkOperario = (req, res, next) => {
-    if (req.user.rol !== 'operario') {
+    if (req.user.usuario_rol !== 'operario') {
         return res.status(403).json({ message: 'Debes ser operario para acceder a este recurso' });
     }
     next();
 };
 
 const checkEncargado = (req, res, next) => {
-    if (req.user.rol !== 'encargado') {
+    if (req.user.usuario_rol !== 'encargado') {
         return res.status(403).json({ message: 'Debes ser encargado para acceder a este recurso' });
     }
     next();
 };
 
 const checkJefe = (req, res, next) => {
-    if (req.user.rol !== 'jefe') {
+
+    if (req.user.usuario_rol !== 'jefe') {
         return res.status(403).json({ message: 'Debes ser jefe para acceder a este recurso' });
     }
     next();
