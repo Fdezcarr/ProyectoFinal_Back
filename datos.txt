@@ -1,0 +1,16 @@
+INSERT INTO `Almacenes` (`nombre`, `localizacion`)
+VALUES
+    ('Almacén Norte', 'Calle del Norte 123, Madrid'),
+    ('Almacén Sur', 'Calle del Sur 456, Sevilla'),
+    ('Almacén Central', 'Avenida Central 789, Barcelona');
+
+
+
+
+INSERT INTO `Usuarios` (`nombre`, `apellido`, `email`, `password`, `rol`, `almacen_id`)
+VALUES
+    ('Carlos', 'García', 'carlos.garcia@gmail.com', '1234', 'operario', 1),
+    ('María', 'López', 'maria.lopez@gmail.com', '1234', 'encargado', 2),
+    ('José', 'Martínez', 'jose.martinez@gmail.com', '1234', 'operario', 3),
+    ('Ana', 'González', 'ana.gonzalez@gmail.com', '1234', 'jefe', NULL),
+    ('Luis', 'Hernández', 'luis.hernandez@gmail.com', '1234', 'operario', 1);
