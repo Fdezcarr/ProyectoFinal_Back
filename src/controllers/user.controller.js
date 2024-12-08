@@ -66,34 +66,6 @@ const authenticateUser = async (req, res, next) => {
     }
 };
 
-const authenticateUser = async (req, res, next) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ message: "Correo y contraseña son requeridos" });
-    }
-
-    try {
-        // Usamos selectByEmailAndPassword solo con el email
-        const [user] = await selectByEmailAndPassword(email);
-
-        if (user.length === 0) {
-            return res.status(401).json({ message: "Correo o contraseña incorrectos" });
-        }
-
-        // Compara la contraseña proporcionada con la almacenada (encriptada)
-        const isPasswordValid = bcrypt.compareSync(password, user[0].password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: "Correo o contraseña incorrectos" });
-        }
-
-        res.json({ message: "Autenticación exitosa", user: user[0] });
-    } catch (error) {
-        next(error);
-    }
-};
-
 const createUser = async (req, res, next) => {
     try {
         const [result] = await insertUser(req.body);

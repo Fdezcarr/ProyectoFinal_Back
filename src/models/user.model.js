@@ -22,11 +22,6 @@ function selectById(id) {
     return pool.query('SELECT * FROM usuarios WHERE id = ?', [id]);
 }
 
-const selectByEmailAndPassword = async (email) => {
-    const query = 'SELECT * FROM usuarios WHERE email = ?';
-    return pool.execute(query, [email]);
-};
-
 function updateUserById(id, data) {
     const { nombre, apellido, email, password, rol } = data;
     const hashedPassword = password ? bcrypt.hashSync(password, 8) : null;
