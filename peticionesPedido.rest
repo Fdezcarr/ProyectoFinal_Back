@@ -1,7 +1,11 @@
 @url = http://localhost:3000/api 
 
 GET {{url}}/pedidos
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjozLCJ1c3VhcmlvX3JvbCI6ImVuY2FyZ2FkbyIsInVzdWFyaW9fbm9tYnJlIjoiTWFudWVsIiwidXN1YXJpb19lbWFpbCI6Im1hbnVlbEBnbWFpbC5jb20iLCJpYXQiOjE3MzM3ODk2NDIsImV4cCI6MTczMzc5MzI0Mn0.w5W5jRmasjUDuNGWsFp9e_VEZM0h4IQimHJbL8J5DKY
 
+
+###
+GET {{url}}/pedidos/estados
 
 ###
 POST {{url}}/pedidos
@@ -29,14 +33,19 @@ Content-Type: application/json
 ###
 PUT {{url}}/pedidos/1
 Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjozLCJ1c3VhcmlvX3JvbCI6ImVuY2FyZ2FkbyIsInVzdWFyaW9fbm9tYnJlIjoiTWFudWVsIiwidXN1YXJpb19lbWFpbCI6Im1hbnVlbEBnbWFpbC5jb20iLCJpYXQiOjE3MzM3OTE3MDEsImV4cCI6MTczMzc5NTMwMX0.VTu6TeR53CA4w_ywVzVID6bxZWN-xAHNd6C3W07KKOU
+
 
 {
-  "fecha_salida": "2024-11-09",
-  "origen": "Almacén Central",
-  "destino": "Sucursal Oeste",
-  "matricula_camion": "ABC-123",
-  "estado": "revisando"
-}
+    "id": 1,
+    "fecha_salida": "2024-11-07T23:00:00.000Z",
+    "origen": "Almacén Izquierdo",
+    "destino": "Sucursal Oeste",
+    "matricula_camion": "ABC-123",
+    "estado": "pendiente",
+    "operario_id": 1,
+    "encargado_id": 2
+  }
 
 
 ###

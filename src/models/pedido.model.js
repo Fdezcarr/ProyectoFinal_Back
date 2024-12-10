@@ -4,7 +4,32 @@ const pool = require('../config/db');
 // Obtener todos los pedidos
 function selectAllPedidos() {
     return pool.query('SELECT * FROM pedidos;');
+
 }
+// Obtener todos los estatus posibles de pedidos
+async function selectAllPedidosEstatus() {
+    try {
+
+        const [rows] = await pool.query(
+            "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pedidos' AND COLUMN_NAME = 'estado' AND TABLE_SCHEMA = 'logistica_almacen'"
+        );
+
+        const columnType = rows[0].COLUMN_TYPE;
+
+
+        const enumOptions = columnType
+            .replace("enum(", "")
+            .replace(")", "")
+            .split(",")
+            .map(option => option.replace(/'/g, ""));
+
+        return enumOptions;
+    } catch (err) {
+        console.error("Error fetching ENUM options:", err.message);
+        throw err;
+    }
+}
+
 
 // Insertar un nuevo pedido
 function insertPedido(data) {
@@ -36,6 +61,7 @@ function deletePedidoById(id) {
 
 module.exports = {
     selectAllPedidos,
+    selectAllPedidosEstatus,
     insertPedido,
     selectPedidoById,
     updatePedidoById,

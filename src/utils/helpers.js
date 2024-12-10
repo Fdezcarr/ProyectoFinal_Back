@@ -5,7 +5,9 @@ const jwt = require('jsonwebtoken');
 const createToken = (usuario) => {
     const data = {
         usuario_id: usuario.id,
-        usuario_rol: usuario.rol
+        usuario_rol: usuario.rol,
+        usuario_nombre: usuario.nombre,
+        usuario_email: usuario.email,
     };
     return jwt.sign(data, 'clave super secreta', { expiresIn: '1h' }); // Expira en 1 hora
 };

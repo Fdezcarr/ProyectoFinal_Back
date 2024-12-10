@@ -91,8 +91,17 @@ const checkJefe = (req, res, next) => {
 };
 
 const checkOperarioOrJefe = (req, res, next) => {
-    if (req.user.rol !== 'operario' && req.user.rol !== 'jefe') {
+    if (req.user.usuario_rol !== 'operario' && req.user.usuario_rol !== 'jefe') {
         return res.status(403).json({ message: 'Debes ser operario o jefe para acceder a este recurso' });
+    }
+    next();
+};
+
+const checkOperarioOrEncargado = (req, res, next) => {
+    if (req.user.usuario_rol !== 'operario' && req.user.usuario_rol !== 'encargado') {
+        return res.status(403).json({
+            message: 'Debes ser operario o encargado para acceder a este recurso'
+        });
     }
     next();
 };
@@ -101,5 +110,5 @@ const checkOperarioOrJefe = (req, res, next) => {
 
 
 module.exports = {
-    checkClienteId, checkToken, checkAdmin, checkRol, checkOperario, checkEncargado, checkJefe, checkOperarioOrJefe
+    checkClienteId, checkToken, checkAdmin, checkRol, checkOperario, checkEncargado, checkJefe, checkOperarioOrJefe, checkOperarioOrEncargado
 }

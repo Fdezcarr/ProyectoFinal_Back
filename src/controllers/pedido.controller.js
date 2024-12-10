@@ -1,5 +1,4 @@
-// src/controllers/pedidosController.js
-const { selectAllPedidos, insertPedido, selectPedidoById, updatePedidoById, deletePedidoById } = require('../models/pedido.model');
+const { selectAllPedidos, insertPedido, selectPedidoById, updatePedidoById, deletePedidoById, selectAllPedidosEstatus } = require('../models/pedido.model');
 
 const getAllPedidos = async (req, res, next) => {
     try {
@@ -25,6 +24,17 @@ const getPedidoById = async (req, res, next) => {
     }
 };
 
+const getAllPedidosEstatus = async (req, res, next) => {
+    try {
+        const result = await selectAllPedidosEstatus();
+        console.log(result)
+        res.json(result);
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 const createPedido = async (req, res, next) => {
     try {
         const [result] = await insertPedido(req.body);
@@ -42,12 +52,11 @@ const updatePedido = async (req, res, next) => {
     try {
         const [existingPedido] = await selectPedidoById(pedidoId);
 
+
         if (existingPedido.length === 0) {
             return res.status(404).json({ message: "Pedido no encontrado" });
         }
-
-        await updatePedidoById(pedidoId, req.body);
-        const [updatedPedido] = await selectPedidoById(pedidoId);
+        const [updatedPedido] = await selectPedidoById(pedidoId, req.body);
         res.json(updatedPedido[0]);
     } catch (error) {
         next(error);
@@ -73,6 +82,7 @@ const deletePedido = async (req, res, next) => {
 module.exports = {
     getAllPedidos,
     getPedidoById,
+    getAllPedidosEstatus,
     createPedido,
     updatePedido,
     deletePedido

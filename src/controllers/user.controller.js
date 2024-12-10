@@ -6,10 +6,10 @@ const { createToken } = require('../utils/helpers');
 const getAllUsers = async (req, res, next) => {
     try {
         const [result] = await selectAll();
-        console.log('Usuarios obtenidos:', result);  // Agregar log
+        console.log('Usuarios obtenidos:', result); 
         res.json(result);
     } catch (error) {
-        console.error('Error al obtener usuarios:', error);  // Log de error
+        console.error('Error al obtener usuarios:', error);  
         next(error);
     }
 };
@@ -18,13 +18,13 @@ const getById = async (req, res, next) => {
     const { userId } = req.params;
     try {
         const [user] = await selectById(userId);
-        console.log('Usuario obtenido por ID:', user);  // Agregar log
+        console.log('Usuario obtenido por ID:', user); 
         if (user.length === 0) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
         res.json(user[0]);
     } catch (error) {
-        console.error('Error al obtener usuario por ID:', error);  // Log de error
+        console.error('Error al obtener usuario por ID:', error);  
         next(error);
     }
 };
@@ -37,15 +37,15 @@ const authenticateUser = async (req, res, next) => {
     }
 
     try {
-        // Buscar al usuario por email
+     
         const [user] = await selectByEmailAndPassword(email);
 
-        // Verificar si el usuario existe
+       
         if (!user || user.length === 0) {
             return res.status(401).json({ message: "Correo o contraseña incorrectos" });
         }
 
-        // Compara la contraseña proporcionada con la almacenada (encriptada)
+ 
         const isPasswordValid = bcrypt.compareSync(password, user[0].password);
 
         if (!isPasswordValid) {
@@ -58,8 +58,7 @@ const authenticateUser = async (req, res, next) => {
         // Devolver el token en la respuesta
         res.json({
             message: "Autenticación exitosa",
-            token: token,  // Incluye el token en la respuesta
-            user: user[0]  // También puedes devolver los datos del usuario si lo deseas
+            token: token, 
         });
     } catch (error) {
         next(error);
@@ -69,12 +68,12 @@ const authenticateUser = async (req, res, next) => {
 const createUser = async (req, res, next) => {
     try {
         const [result] = await insertUser(req.body);
-        console.log('Usuario creado con ID:', result.insertId);  // Agregar log
+        console.log('Usuario creado con ID:', result.insertId); 
         const insertId = result.insertId;
         const [user] = await selectById(insertId);
         res.status(201).json(user[0]);
     } catch (error) {
-        console.error('Error al crear usuario:', error);  // Log de error
+        console.error('Error al crear usuario:', error);
         next(error);
     }
 };
@@ -83,7 +82,7 @@ const updateUser = async (req, res, next) => {
     const { userId } = req.params;
     try {
         const [existingUser] = await selectById(userId);
-        console.log('Usuario a actualizar:', existingUser);  // Agregar log
+        console.log('Usuario a actualizar:', existingUser); 
         if (existingUser.length === 0) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
@@ -92,7 +91,7 @@ const updateUser = async (req, res, next) => {
         const [updatedUser] = await selectById(userId);
         res.json(updatedUser[0]);
     } catch (error) {
-        console.error('Error al actualizar usuario:', error);  // Log de error
+        console.error('Error al actualizar usuario:', error);  
         next(error);
     }
 };
@@ -101,7 +100,7 @@ const deleteUser = async (req, res, next) => {
     const { userId } = req.params;
     try {
         const [user] = await selectById(userId);
-        console.log('Usuario a eliminar:', user);  // Agregar log
+        console.log('Usuario a eliminar:', user); 
         if (user.length === 0) {
             return res.status(404).json({ message: "Usuario no encontrado" });
         }
@@ -109,7 +108,7 @@ const deleteUser = async (req, res, next) => {
         await deleteById(userId);
         res.json({ message: "Usuario eliminado correctamente", usuario: user[0] });
     } catch (error) {
-        console.error('Error al eliminar usuario:', error);  // Log de error
+        console.error('Error al eliminar usuario:', error); 
         next(error);
     }
 };
