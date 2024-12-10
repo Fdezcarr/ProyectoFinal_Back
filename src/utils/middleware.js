@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+
 const { selectById: selectClienteById } = require("../models/user.model");
 const { selectById: selectStaffById } = require('../models/staffModel');
 
@@ -34,7 +35,7 @@ const checkToken = async (req, res, next) => {
     // ¿El token es correcto?
     let data;
     try {
-        data = jwt.verify(token, 'clave super secreta');
+        data = jwt.verify(token, process.env.JWT_SECRET);
         req.user = data
     } catch (error) {
         return res.status(403).json({ message: 'El token es incorrecto' });
@@ -45,10 +46,6 @@ const checkToken = async (req, res, next) => {
     if (!usuario) {
         return res.status(403).json({ message: 'El usuario no existe' });
     }
-
-    // req.user = usuario;
-    // console.log('Decoded token:', req.user);
-
     next();
 }
 

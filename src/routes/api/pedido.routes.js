@@ -16,8 +16,11 @@ router.get('/:pedidoId', checkToken, checkEncargado, pedidoController.getPedidoB
 // Ruta para crear un nuevo pedido (solo operarios)
 router.post('/', checkToken, checkOperario, pedidoController.createPedido);
 
-// // Ruta para actualizar un pedido por su ID (solo operarios o encargados)
+// Ruta para actualizar un pedido por su ID (solo operarios o encargados)
 router.put('/:pedidoId', checkToken, checkOperarioOrEncargado, pedidoController.updatePedido);
+
+// Ruta para actualizar el estado de un pedido por su ID (solo operarios o encargados)
+router.patch('/estados/:pedidoId', checkToken, checkOperarioOrEncargado, pedidoController.patchPedidoEstado);
 
 // Ruta para eliminar un pedido (solo encargado)
 router.delete('/:pedidoId', checkToken, checkEncargado, pedidoController.deletePedido);

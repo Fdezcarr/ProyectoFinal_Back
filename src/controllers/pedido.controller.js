@@ -1,4 +1,5 @@
-const { selectAllPedidos, insertPedido, selectPedidoById, updatePedidoById, deletePedidoById, selectAllPedidosEstatus } = require('../models/pedido.model');
+const { selectAllPedidos, insertPedido, selectPedidoById, updatePedidoById, deletePedidoById, selectAllPedidosEstatus, updatePedidoEstadoById } = require('../models/pedido.model');
+const { formateoFecha } = require('../utils/helpers');
 
 const getAllPedidos = async (req, res, next) => {
     try {
@@ -27,7 +28,6 @@ const getPedidoById = async (req, res, next) => {
 const getAllPedidosEstatus = async (req, res, next) => {
     try {
         const result = await selectAllPedidosEstatus();
-        console.log(result)
         res.json(result);
 
     } catch (error) {
@@ -49,16 +49,56 @@ const createPedido = async (req, res, next) => {
 
 const updatePedido = async (req, res, next) => {
     const { pedidoId } = req.params;
+
     try {
+        // Check if the pedido exists
         const [existingPedido] = await selectPedidoById(pedidoId);
-
-
-        if (existingPedido.length === 0) {
+        if (!existingPedido) {
             return res.status(404).json({ message: "Pedido no encontrado" });
         }
-        const [updatedPedido] = await selectPedidoById(pedidoId, req.body);
-        res.json(updatedPedido[0]);
+
+        // Format the date if provided
+        if (req.body.fecha_salida) {
+            req.body.fecha_salida = formateoFecha(req.body.fecha_salida);
+        }
+
+        // Update the pedido
+        const [updateResult] = await updatePedidoById(pedidoId, req.body);
+
+
+        // Check if any rows were affected
+        if (updateResult.affectedRows === 0) {
+            return res.status(400).json({ message: "No se pudo actualizar el pedido" });
+        }
+
+        // Fetch the updated pedido
+        const [updatedPedido] = await selectPedidoById(pedidoId);
+        res.json(updatedPedido);
     } catch (error) {
+        console.error('Error updating pedido:', error);
+        next(error);
+    }
+};
+
+const patchPedidoEstado = async (req, res, next) => {
+    const { pedidoId } = req.params;
+
+    try {
+        const { estado } = req.body;
+        if (!estado) {
+            return res.status(400).json({ message: "El campo 'estado' es obligatorio" });
+        }
+        const [existingPedido] = await selectPedidoById(pedidoId);
+        if (!existingPedido) {
+            return res.status(404).json({ message: "Pedido no encontrado" });
+        }
+        
+        await updatePedidoEstadoById(pedidoId, {estado})
+
+        const [updatedPedido] = await selectPedidoById(pedidoId);
+        res.json(updatedPedido);
+    } catch (error) {
+        console.error('Error updating pedido estado:', error);
         next(error);
     }
 };
@@ -85,5 +125,6 @@ module.exports = {
     getAllPedidosEstatus,
     createPedido,
     updatePedido,
+    patchPedidoEstado,
     deletePedido
 };

@@ -47,6 +47,15 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjozLCJ1c3Vh
     "encargado_id": 2
   }
 
+###
+PATCH {{url}}/pedidos/estados/4
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjozLCJ1c3VhcmlvX3JvbCI6ImVuY2FyZ2FkbyIsInVzdWFyaW9fbm9tYnJlIjoiTWFudWVsIiwidXN1YXJpb19lbWFpbCI6Im1hbnVlbEBnbWFpbC5jb20iLCJpYXQiOjE3MzM4MzE1MTUsImV4cCI6MTczMzg2MDMxNX0.MnGhq9BGQFTvyKj2nK9OoFsJVJBp-AfA8-nF0Gi_Dyk
+
+{
+    "estado": "pendiente"
+  }
+
 
 ###
 

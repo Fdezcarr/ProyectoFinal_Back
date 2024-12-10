@@ -9,20 +9,15 @@ function selectAllPedidos() {
 // Obtener todos los estatus posibles de pedidos
 async function selectAllPedidosEstatus() {
     try {
-
         const [rows] = await pool.query(
             "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'pedidos' AND COLUMN_NAME = 'estado' AND TABLE_SCHEMA = 'logistica_almacen'"
         );
-
         const columnType = rows[0].COLUMN_TYPE;
-
-
         const enumOptions = columnType
             .replace("enum(", "")
             .replace(")", "")
             .split(",")
             .map(option => option.replace(/'/g, ""));
-
         return enumOptions;
     } catch (err) {
         console.error("Error fetching ENUM options:", err.message);
@@ -54,6 +49,15 @@ function updatePedidoById(id, data) {
     );
 }
 
+// Actualizar el estado de un pedido por su ID
+function updatePedidoEstadoById(id, data) {
+    const { estado } = data;
+    return pool.query(
+        'UPDATE pedidos SET estado = ? WHERE id = ?',
+        [estado, id]
+    );
+}
+
 // Borrar un pedido por su ID
 function deletePedidoById(id) {
     return pool.query('DELETE FROM pedidos WHERE id = ?', [id]);
@@ -65,5 +69,6 @@ module.exports = {
     insertPedido,
     selectPedidoById,
     updatePedidoById,
+    updatePedidoEstadoById,
     deletePedidoById
 };
