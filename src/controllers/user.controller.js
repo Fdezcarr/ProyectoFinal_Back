@@ -68,6 +68,9 @@ const authenticateUser = async (req, res, next) => {
 const createUser = async (req, res, next) => {
     const { nombre, apellido, email, password, rol, almacenId } = req.body;
 
+    if (!almacenId) { 
+        return res.status(400).json({ message: "El ID del almacén es obligatorio" }); 
+    } 
 
     if (!rol || !['admin', 'jefe', 'operario'].includes(rol)) {
         return res.status(400).json({ message: "El rol proporcionado no es válido" });

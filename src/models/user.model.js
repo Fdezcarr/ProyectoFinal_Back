@@ -10,11 +10,11 @@ function selectByEmailAndPassword(email) {
 }
 
 function insertUser(data) {
-    const { nombre, apellido, email, password, rol } = data;
+    const { nombre, apellido, email, password, rol, almacenId } = data;
     const hashedPassword = bcrypt.hashSync(password, 8);
     return pool.query(
-        'INSERT INTO usuarios (nombre, apellido, email, password, rol) VALUES (?, ?, ?, ?, ?)',
-        [nombre, apellido, email, hashedPassword, rol]
+        'INSERT INTO usuarios (nombre, apellido, email, password, rol, almacenId ) VALUES (?, ?, ?, ?, ?, ?)',
+        [nombre, apellido, email, hashedPassword, rol, almacenId ]
     );
 }
 
@@ -23,7 +23,7 @@ function selectById(id) {
 }
 
 function updateUserById(id, data) {
-    const { nombre, apellido, email, password, rol } = data;
+    const { nombre, apellido, email, password, rol, almacenId } = data;
     const hashedPassword = password ? bcrypt.hashSync(password, 8) : null;
 
     let query = 'UPDATE usuarios SET nombre = ?, apellido = ?, email = ?, rol = ?';
@@ -32,6 +32,11 @@ function updateUserById(id, data) {
     if (hashedPassword) {
         query += ', password = ?';
         values.push(hashedPassword);
+    }
+
+    if (almacenId) { 
+        query += ', almacenId = ?'; 
+        values.push(almacenId); 
     }
 
     query += ' WHERE id = ?';
