@@ -1,5 +1,5 @@
 // src/controllers/user.controller.js
-const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword } = require('../models/user.model');
+const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword, selectByEmail } = require('../models/user.model');
 const bcrypt = require('bcryptjs'); 
 const { createToken } = require('../utils/helpers');
 
@@ -113,11 +113,34 @@ const deleteUser = async (req, res, next) => {
     }
 };
 
+const checkEmail = async (req, res, next) => {
+    const { email } = req.query;
+
+    if (!email) {
+        return res.status(400).json({ message: "El email es obligatorio" });
+    }
+
+    try {
+        const [user] = await selectByEmail(email); // *** Consulta para verificar el email ***
+        console.log('Resultado de la verificación de email:', user); 
+
+        if (user.length > 0) {
+            return res.status(200).json({ exists: true });
+        }
+
+        return res.status(200).json({ exists: false });
+    } catch (error) {
+        console.error('Error al verificar el email:', error);  
+        next(error);
+    }
+};
+
 module.exports = {
     getAllUsers,
     createUser,
     getById,
     updateUser,
     deleteUser,
-    authenticateUser
+    authenticateUser,
+    checkEmail
 };

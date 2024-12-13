@@ -1,4 +1,4 @@
-const { getAllUsers, createUser, updateUser, deleteUser } = require('../../controllers/user.controller');
+const { getAllUsers, createUser, updateUser, deleteUser, checkEmail } = require('../../controllers/user.controller');
 const { checkToken, checkAdmin, checkRol, checkJefe } = require('../../utils/middleware');
 
 const router = require('express').Router();
@@ -14,5 +14,7 @@ router.put('/:userId', checkToken, checkJefe, updateUser);
 
 // Ruta para eliminar un usuario (solo para administradores) 
 router.delete('/:userId', checkToken, checkJefe, deleteUser);
+
+router.get('/checkEmail', checkToken, checkEmail);
 
 module.exports = router;
