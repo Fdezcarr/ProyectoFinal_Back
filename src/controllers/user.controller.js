@@ -90,6 +90,11 @@ const createUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     const { userId } = req.params;
+    
+    if (!nombre || !apellido || !email || !rol || !almacenId) {
+        return res.status(400).json({ message: "Todos los campos son obligatorios" });
+    }
+
     try {
         const [existingUser] = await selectById(userId);
         console.log('Usuario a actualizar:', existingUser);
