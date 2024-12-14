@@ -19,4 +19,5 @@ router.put('/:almacenId',  checkToken, checkJefe, almacenController.updateAlmace
 // Eliminar un almacén por su ID
 router.delete('/:almacenId',  checkToken, checkJefe, almacenController.deleteAlmacen);
 
+
 module.exports = router;

@@ -1,5 +1,5 @@
 // src/controllers/user.controller.js
-const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword, selectByEmail, selectAllFromRol } = require('../models/user.model');
+const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword, selectByEmail, selectAllFromRol, selectAllFromRolInAlmacen } = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const { createToken } = require('../utils/helpers');
 
@@ -39,9 +39,14 @@ const getAllOperario = async (req, res, next) => {
         next(error)
     }
 }
-const getAllEncargado = async (req, res, next) => {
+
+const getAllOperarioByAlmacen = async (req, res, next) => {
+    const { almacen_id } = req.params;
     try {
-        const [operarios] = await selectAllFromRol('encargado')
+        if (!almacen_id) {
+            return res.status(400).json({ error: 'Es necesario el ID del almacén' });
+        }
+        const [operarios] = await selectAllFromRolInAlmacen('operario', almacen_id)
         res.json(operarios);
 
     } catch (error) {
@@ -49,6 +54,34 @@ const getAllEncargado = async (req, res, next) => {
         next(error)
     }
 }
+
+const getAllEncargado = async (req, res, next) => {
+    try {
+        const [encargados] = await selectAllFromRol('encargado')
+        res.json(encargados);
+
+    } catch (error) {
+        console.error('Error:', error)
+        next(error)
+    }
+}
+
+const getAllEncargadoByAlmacen = async (req, res, next) => {
+    const { almacen_id } = req.params;
+    try {
+        if (!almacen_id) {
+            return res.status(400).json({ error: 'Es necesario el ID del almacén' });
+        }
+        const [encargados] = await selectAllFromRolInAlmacen('encargado', almacen_id)
+        res.json(encargados);
+
+    } catch (error) {
+        console.error('Error:', error)
+        next(error)
+    }
+}
+
+
 
 const authenticateUser = async (req, res, next) => {
     const { email, password } = req.body;
@@ -174,7 +207,9 @@ const checkEmail = async (req, res, next) => {
 module.exports = {
     getAllUsers,
     getAllOperario,
+    getAllOperarioByAlmacen,
     getAllEncargado,
+    getAllEncargadoByAlmacen,
     createUser,
     getById,
     updateUser,

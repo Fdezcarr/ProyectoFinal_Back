@@ -25,6 +25,9 @@ function selectById(id) {
 function selectAllFromRol(rol){
     return pool.query('SELECT * FROM usuarios WHERE rol = ?', [rol]);
 }
+function selectAllFromRolInAlmacen(rol, almacen_id){
+    return pool.query('SELECT * FROM usuarios WHERE rol = ? AND almacen_id = ?', [rol, almacen_id]);
+}
 
 function updateUserById(id, data) {
     const { nombre, apellido, email, password, rol, almacenId } = data;
@@ -58,6 +61,7 @@ module.exports = {
     insertUser,
     selectById,
     selectAllFromRol,
+    selectAllFromRolInAlmacen,
     updateUserById,
     deleteById, 
     selectByEmailAndPassword
