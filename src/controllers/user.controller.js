@@ -1,5 +1,5 @@
 // src/controllers/user.controller.js
-const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword, selectByEmail } = require('../models/user.model');
+const { selectAll, insertUser, selectById, updateUserById, deleteById, selectByEmailAndPassword, selectByEmail, selectAllFromRol } = require('../models/user.model');
 const bcrypt = require('bcryptjs');
 const { createToken } = require('../utils/helpers');
 
@@ -28,6 +28,27 @@ const getById = async (req, res, next) => {
         next(error);
     }
 };
+
+const getAllOperario = async (req, res, next) => {
+    try {
+        const [operarios] = await selectAllFromRol('operario')
+        res.json(operarios);
+
+    } catch (error) {
+        console.error('Error:', error)
+        next(error)
+    }
+}
+const getAllEncargado = async (req, res, next) => {
+    try {
+        const [operarios] = await selectAllFromRol('encargado')
+        res.json(operarios);
+
+    } catch (error) {
+        console.error('Error:', error)
+        next(error)
+    }
+}
 
 const authenticateUser = async (req, res, next) => {
     const { email, password } = req.body;
@@ -66,11 +87,11 @@ const authenticateUser = async (req, res, next) => {
 };
 
 const createUser = async (req, res, next) => {
-    const { nombre, apellido, email, password, rol, almacenId } = req.body;
+    const { nombre, apellido, email, password, rol, almacen_id } = req.body;
 
-    if (!almacenId) { 
-        return res.status(400).json({ message: "El ID del almacén es obligatorio" }); 
-    } 
+    if (!almacen_id) {
+        return res.status(400).json({ message: "El ID del almacén es obligatorio" });
+    }
 
     if (!rol || !['admin', 'jefe', 'operario'].includes(rol)) {
         return res.status(400).json({ message: "El rol proporcionado no es válido" });
@@ -90,8 +111,8 @@ const createUser = async (req, res, next) => {
 
 const updateUser = async (req, res, next) => {
     const { userId } = req.params;
-    
-    if (!nombre || !apellido || !email || !rol || !almacenId) {
+
+    if (!nombre || !apellido || !email || !rol || !almacen_id) {
         return res.status(400).json({ message: "Todos los campos son obligatorios" });
     }
 
@@ -152,6 +173,8 @@ const checkEmail = async (req, res, next) => {
 
 module.exports = {
     getAllUsers,
+    getAllOperario,
+    getAllEncargado,
     createUser,
     getById,
     updateUser,
