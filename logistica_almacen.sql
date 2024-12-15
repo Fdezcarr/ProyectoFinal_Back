@@ -49,14 +49,15 @@
         --
 
         CREATE TABLE `pedidos` (
-        `id` int(10) UNSIGNED NOT NULL,
+        `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
         `fecha_salida` date NOT NULL,
         `origen` varchar(255) NOT NULL,
         `destino` varchar(255) NOT NULL,
         `matricula_camion` varchar(50) NOT NULL,
         `estado` enum('completado','revisando','pendiente') DEFAULT 'pendiente',
         `operario_id` int(10) UNSIGNED DEFAULT NULL,
-        `encargado_id` int(10) UNSIGNED DEFAULT NULL
+        `encargado_id` int(10) UNSIGNED DEFAULT NULL,
+        PRIMARY KEY (`id`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
         --
