@@ -1,0 +1,31 @@
+@url = http://localhost:3000/api 
+
+
+POST {{url}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "jose@gmail.com",
+  "password": "1234"
+}
+
+
+###
+
+GET {{url}}/pedidos
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c3VhcmlvX2lkIjoxLCJ1c3VhcmlvX3JvbCI6ImplZmUiLCJpYXQiOjE3MzMxNzc2NjksImV4cCI6MTczMzE4MTI2OX0.0Af5D1758Vs9VIlDZEgNg7OQ_db7gdy-lnMSBwIbk_Q
+###
+
+
+POST {{url}}/users
+Authorization: Bearer <tu_token_jwt>
+Content-Type: application/json
+
+{
+  "nombre": "Juan",
+  "apellido": "Pérez",
+  "email": "juan.perez@example.com",
+  "password": "admin123", 
+  "rol": "admin"
+}
